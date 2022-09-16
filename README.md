@@ -1,3 +1,21 @@
+# profanity2
+
+Previos version of the project has critical issue allowing to recover private key from public key: https://blog.1inch.io/a-vulnerability-disclosed-in-profanity-an-ethereum-vanity-address-tool-68ed7455fc8c
+
+This project "profanity2" was forked from the original project and modified to avoid private key generation, instead it bruteforces offsets to a user-provided public key until desired vanity address will be discovered.Provide public key in form of 128-symbol hex string after `-z` parameter flag. And use resulting private key by adding it to your seed private key to achieve final private key of the desired vanity address. You even can outsource vanity address generation to someone without disclosing final private key to anyone.
+
+You can use this terminal command to add 2 private keys, just insert 2 private keys in form of 2 hexademical strings of 64-symbols long each:
+```
+(echo 'ibase=16;obase=10' && (echo '(PRIVATE_KEY_A + PRIVATE_KEY_B) % FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F' | tr '[:lower:]' '[:upper:]')) | bc
+```
+
+Here is content of `README.md` file of the previous version:
+
+# profanity
+Profanity is a high performance (probably the fastest!) vanity address generator for Ethereum. Create cool customized addresses that you never realized you needed! Recieve Ether in style! Wow!
+
+![Screenshot](/img/screenshot.png?raw=true "Wow! That's a lot of zeros!")
+
 ### Releases
 Latest release compiled for 64-bit Windows & Linux can be found [here](https://github.com/johguse/profanity/releases).
 
@@ -11,7 +29,6 @@ usage: ./profanity [OPTIONS]
   Basic modes:
     --benchmark             Run without any scoring, a benchmark.
     --zeros                 Score on zeros anywhere in hash.
-    --gas                   Score on number of zero bytes.
     --letters               Score on letters anywhere in hash.
     --numbers               Score on numbers anywhere in hash.
     --mirror                Score on mirroring from center.
@@ -77,4 +94,3 @@ usage: ./profanity [OPTIONS]
 |RX 580|1366|1750|YES|92 MH/s| ~47 s| 1.2x
 |R9 290|1040|1300|NO|91 MH/s| ~47 s | 1.1x
 |RX 470|1216|1750|YES|73 MH/s| ~59s | 1.2x
-=======

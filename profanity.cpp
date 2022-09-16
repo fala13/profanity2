@@ -151,6 +151,7 @@ int main(int argc, char * * argv) {
 		bool bModeNumbers = false;
 		std::string strModeLeading;
 		std::string strModeMatching;
+		std::string strPublicKey;
 		bool bModeLeadingRange = false;
 		bool bModeRange = false;
 		bool bModeMirror = false;
@@ -186,9 +187,20 @@ int main(int argc, char * * argv) {
 		argp.addSwitch('I', "inverse-multiple", inverseMultiple);
 		argp.addSwitch('c', "contract", bMineContract);
 		argp.addSwitch('g', "gas", bModeGas);
+		argp.addSwitch('z', "publicKey", strPublicKey);
 
 		if (!argp.parse()) {
 			std::cout << "error: bad arguments, try again :<" << std::endl;
+			return 1;
+		}
+
+		if (strPublicKey.length() == 0) {
+			std::cout << "error: this tool requires your public key to derive it's private key security" << std::endl;
+			return 1;
+		}
+
+		if (strPublicKey.length() != 128) {
+			std::cout << "error: public key must be 128 hexademical characters long" << std::endl;
 			return 1;
 		}
 
@@ -345,7 +357,7 @@ int main(int argc, char * * argv) {
 
 		std::cout << std::endl;
 
-		Dispatcher d(clContext, clProgram, mode, worksizeMax == 0 ? inverseSize * inverseMultiple : worksizeMax, inverseSize, inverseMultiple, 0);
+		Dispatcher d(clContext, clProgram, mode, worksizeMax == 0 ? inverseSize * inverseMultiple : worksizeMax, inverseSize, inverseMultiple, 0, strPublicKey);
 		for (auto & i : vDevices) {
 			d.addDevice(i, worksizeLocal, mDeviceIndex[i]);
 		}
