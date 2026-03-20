@@ -20,6 +20,23 @@
 #define CL_DEVICE_PCI_BUS_ID_NV  0x4008
 #define CL_DEVICE_PCI_SLOT_ID_NV 0x4009
 
+// AMD device topology struct (missing from some OpenCL headers)
+typedef struct _cl_device_topology_amd {
+    union {
+        struct {
+            unsigned int bus;
+            unsigned int device;
+            unsigned int function;
+        } pcie;
+        struct {
+            unsigned int type;
+            unsigned int data;
+        } raw;
+    };
+} cl_device_topology_amd;
+
+#define CL_DEVICE_TOPOLOGY_TYPE_PCIE_AMD  1
+
 #include "Dispatcher.hpp"
 #include "ArgParser.hpp"
 #include "Mode.hpp"
